@@ -1,0 +1,12 @@
+{% extends 'base.html' %}  
+
+{% block header %} Create New Restaurant {% endblock %}
+
+
+{% block content %}
+<form method="POST" action="\restaurant\create">
+    <input type="text" name="name" placeholder="Restaurant Name"/>
+    <input type="submit" value="Submit"/>
+</form>
+
+{% endblock %}
