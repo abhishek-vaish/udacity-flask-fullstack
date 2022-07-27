@@ -11,8 +11,9 @@ session = DBSession()
 def readRestaurant():
     restaurant = session.query(Restaurant).first()
     DEFAULT_MESSAGE='No items found!!'
+    print(restaurant)
     if restaurant:
-        items = session.query(MenuItems).filter(restaurant_id = restaurant.id)
+        items = session.query(MenuItems)
         return render_template('main.html', name=restaurant.name, id=restaurant.id, items=items)
     else:
         return render_template('main.html', data=DEFAULT_MESSAGE)
@@ -29,20 +30,25 @@ def createRestaurant():
 
 # Task 1: Create route for newMenuItem function here
 
+
 @app.route("/restaurant/<int:restaurant_id>/create/", methods=['GET','POST'])
 def createMenuItem(restaurant_id):
-    if request.method == 'POST':
-        session.add(MenuItems(
-            name=request.form['name'], 
-            description=request.form['description'],
-            price=request.form['price'], 
-            course=request.form['course'], 
-            restaurant_id=restaurant_id
-        ))
-        session.commit()
-        return redirect(url_for('readRestaurant'))
-    else:
-        return render_template('menuitems.html', restaurant_id=restaurant_id)
+    try:
+        if request.method == 'POST':
+            session.add(MenuItems(
+                name=request.form['name'], 
+                description=request.form['description'],
+                price=request.form['price'], 
+                course=request.form['course'], 
+                restaurant_id=restaurant_id
+            ))
+            session.commit()
+            return redirect(url_for('readRestaurant'))
+        else:
+            return render_template('menuitems.html', restaurant_id=restaurant_id)
+    except:
+        session.rollback()
+        return
 
 # Task 2: Create route for editMenuItem function here
 

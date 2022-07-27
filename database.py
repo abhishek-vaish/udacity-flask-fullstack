@@ -22,5 +22,5 @@ class MenuItems(Base):
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
 
-engine = create_engine('sqlite:///restaurantFlask.db')
+engine = create_engine('sqlite:///restaurantFlask.db', connect_args={'check_same_thread': False})
 Base.metadata.create_all(engine)
