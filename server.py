@@ -52,15 +52,22 @@ def createMenuItem(restaurant_id):
 
 # Task 2: Create route for editMenuItem function here
 
-@app.route("/restaurant/<int:restaurant_id>/<int:menu_id>/edit/")
-def editMenuItem(restaurant_id, menu_id):
-    return "page to edit a menu item. Task 2 complete!"
+# @app.route("/restaurant/<int:restaurant_id>/<int:menu_id>/edit/")
+# def editMenuItem(restaurant_id, menu_id):
+#     return "page to edit a menu item. Task 2 complete!"
 
 # Task 3: Create a route for deleteMenuItem function here
 
-@app.route("/restaurant/<int:restaurant_id>/<int:menu_id>/delete/")
+@app.route("/restaurant/<int:restaurant_id>/<int:menu_id>/delete/", methods=['GET', 'DELETE'])
 def deleteMenuItem(restaurant_id, menu_id):
-    return "page to delete a menu item. Task 3 complete!"
+    menu_item_name = session.get(MenuItems).filter(menu_id=menu_id)
+    if request.method == 'DELETE':
+        delete_menu_item = session.query(MenuItems).filter(restaurant_id=restaurant_id, menu_id=menu_id)
+        session.delete(delete_menu_item)
+        session.commit()
+        return redirect(url_for('readRestaurant'))
+    render_template('deleteMenuItem.html', item_name=menu_item_name.name, menu_id=menu_id, restaurant_id=restaurant_id)
+    
 
 
 
